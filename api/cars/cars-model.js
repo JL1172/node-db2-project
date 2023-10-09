@@ -5,7 +5,7 @@ const getAll = async() => {
 }
 
 const getById = async(id) => {
-  return await db("cars").where({car_id : id})
+  return await db("cars").where({id : id})
 }
 
 const create = async(newCar) => {
