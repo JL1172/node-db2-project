@@ -49,7 +49,6 @@ async function checkVinNumberValid(req, res, next) {
     if (isValid) {
       next();
     } else {
-    //  res.status(400).json({message : `vin ${vin} is invalid`})
      next({status : 400, message : `vin ${vin} is invalid` })
     }
   } catch (err) {next(err)}
