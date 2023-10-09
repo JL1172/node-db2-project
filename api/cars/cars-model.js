@@ -10,7 +10,7 @@ const getById = async(id) => {
 
 const create = async(newCar) => {
   const createdCar = await db("cars").insert(newCar);
-  return createdCar; 
+  return await db("cars").where({id : createdCar[0]}).first();  
 }
 
 module.exports = {

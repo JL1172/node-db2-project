@@ -17,27 +17,20 @@ async function checkCarId (req, res, next) {
 async function checkCarPayload(req, res, next) {
   try {
 
+    const {vin,make,model,mileage} = req.body;
 
-    const valuesObj = Object.values(req.body); 
-    const keysObj = Object.keys(req.body); 
-
-    if (valuesObj.length < 4) {
+    if (!vin || !make || !model || !mileage) {
   
-      const require = ["vin", "make", "model", "mileage", "title", "transmission"]
-
-      const finder = [];
+      const require = ["vin", "make", "model", "mileage"]
 
       for (let key of require) {
-        if (!keysObj.includes(key)) {
-           finder.push(key);
+        if (!req.body.includes(key)) {
+           next({status : 400, message : `${key} is missing`})
            break; 
         }
       }
-    
-      next({status : 400, message : `${finder[0]} is missing`})
-
+      
     } else {
-
       next(); 
     }
   } catch (err) {next(err)}

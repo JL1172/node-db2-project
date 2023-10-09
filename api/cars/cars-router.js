@@ -21,6 +21,7 @@ router.post("/", checkCarPayload, checkVinNumberValid, checkVinNumberUnique, asy
         res.status(201).json(created);
     } catch (err) { next(err) }
 })
+
 router.use((error, req, res, next) => { //eslint-disable-line
     res.status(error.status || 500).json({
         message: error.message,
