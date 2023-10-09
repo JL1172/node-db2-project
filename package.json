@@ -8,7 +8,9 @@
     "down": "knex migrate:down",
     "up": "knex migrate:up",
     "latest": "knex migrate:latest",
-    "seed" : "knex seed:run"
+    "seed" : "knex seed:run",
+    "rollback" : "knex migrate:rollback",
+    "resetdb" : "npm run rollback && npm run latest && npm run seed"
   },
   "devDependencies": {
     "@types/jest": "^27.5.0",
