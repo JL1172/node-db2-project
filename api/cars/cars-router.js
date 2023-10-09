@@ -4,6 +4,7 @@ const { checkCarPayload, checkCarId, checkVinNumberValid, checkVinNumberUnique }
 
 const router = express.Router();
 
+
 router.get("/", async (req, res, next) => {
     try {
         const car = await CarData.getAll();
@@ -11,9 +12,11 @@ router.get("/", async (req, res, next) => {
     } catch (err) { next(err) }
 })
 
+
 router.get("/:id", checkCarId, (req, res) => {
     res.status(200).json(req.car);
 })
+
 
 router.post("/", checkCarPayload, checkVinNumberValid, checkVinNumberUnique, async (req, res, next) => {
     try {

@@ -1,6 +1,8 @@
 const db = require("../../data/db-config"); 
 const vinValidator = require("vin-validator"); 
 
+
+
 async function checkCarId (req, res, next) {
   try {
     const carById = await db("cars").where({id : req.params.id}).first();
@@ -13,6 +15,8 @@ async function checkCarId (req, res, next) {
 
   } catch (err) {next(err)}
 }
+
+
 
 async function checkCarPayload(req, res, next) {
   try {
@@ -36,6 +40,8 @@ async function checkCarPayload(req, res, next) {
   } catch (err) {next(err)}
 }
 
+
+
 async function checkVinNumberValid(req, res, next) {
   try {
     const {vin} = req.body;
@@ -43,10 +49,13 @@ async function checkVinNumberValid(req, res, next) {
     if (isValid) {
       next();
     } else {
-     res.status(400).json({message : `vin ${vin} is invalid`})
+    //  res.status(400).json({message : `vin ${vin} is invalid`})
+     next({status : 400, message : `vin ${vin} is invalid` })
     }
   } catch (err) {next(err)}
 }
+
+
 
 async function checkVinNumberUnique(req, res, next) {
   try {
