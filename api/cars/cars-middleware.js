@@ -1,6 +1,7 @@
 const db = require("../../data/db-config"); 
+const vinValidator = require("vin-validator"); 
 
-const checkCarId = async(req, res, next) => {
+async function checkCarId (req, res, next) {
   try {
     const carById = await db("cars").where({car_id : req.params.id}).first();
     if (!carById) {
@@ -13,32 +14,56 @@ const checkCarId = async(req, res, next) => {
   } catch (err) {next(err)}
 }
 
-const checkCarPayload = async(req, res, next) => {
+async function checkCarPayload(req, res, next) {
   try {
-    const {car_vin, car_make, car_model, car_mileage, car_title, car_transmission} = req.body;
-    const require = [car_vin, car_make, car_model, car_mileage, car_title, car_transmission]
+
+
     const valuesObj = Object.values(req.body); 
     const keysObj = Object.keys(req.body); 
-    if (valuesObj.length !== 4) {
+
+    if (valuesObj.length < 4) {
+  
+      const require = ["car_vin", "car_make", "car_model", "car_mileage", "car_title", "car_transmission"]
+
       const finder = [];
+
       for (let key of require) {
         if (!keysObj.includes(key)) {
-          return finder.push(key); 
+           finder.push(key); 
         }
       }
+    
       next({status : 400, message : `${finder[0]} is missing`})
+
     } else {
+
       next(); 
     }
   } catch (err) {next(err)}
 }
 
-const checkVinNumberValid = async(req, res, next) => {
-  // DO YOUR MAGIC
+async function checkVinNumberValid(req, res, next) {
+  try {
+    const {car_vin} = req.body;
+    const isValid = vinValidator.validate(car_vin)
+    if (isValid) {
+      next();
+    } else {
+      next({status : 400, message : `vin ${car_vin} is invalid`})
+    }
+  } catch (err) {next(err)}
 }
 
-const checkVinNumberUnique = async(req, res, next) => {
-  // DO YOUR MAGIC
+async function checkVinNumberUnique(req, res, next) {
+  try {
+    const {car_vin} = req.body;
+    const searchForVin = await db("cars").where({car_vin : car_vin}).first();
+    if (!searchForVin) {
+      next();
+    } else {
+      next({status : 400, message : `vin ${car_vin} already exists`})
+    }
+  } catch (err) {next(err)}
 }
 
 
