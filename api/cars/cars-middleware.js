@@ -22,14 +22,14 @@ async function checkCarPayload(req, res, next) {
     if (!vin || !make || !model || !mileage) {
   
       const require = ["vin", "make", "model", "mileage"]
-
+      const objKeys = Object.keys(req.body); 
       for (let key of require) {
-        if (!req.body.includes(key)) {
+        if (!objKeys.includes(key)) {
            next({status : 400, message : `${key} is missing`})
            break; 
         }
       }
-      
+
     } else {
       next(); 
     }
@@ -43,7 +43,7 @@ async function checkVinNumberValid(req, res, next) {
     if (isValid) {
       next();
     } else {
-      next({status : 400, message : `vin ${vin} is invalid`})
+     res.status(400).json({message : `vin ${vin} is invalid`})
     }
   } catch (err) {next(err)}
 }
